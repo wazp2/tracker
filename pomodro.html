@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <a href="index.html">
-               <title>AGS Sınav Takibi</title>
-            </a>
- 
+    <title>AGS Sınav Takibi - Pomodoro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
@@ -48,8 +44,18 @@
 <body class="bg-[#0d0f1c] text-gray-300 min-h-screen flex flex-col items-center p-4">
 
     <!-- Header -->
-    <header class="w-full max-w-4xl flex justify-between items-center py-4 px-6 mb-8">
-        <h1 class="text-2xl font-bold text-gray-100">AGS Sınav Takibi</h1>
+    <header class="w-full max-w-4xl flex items-center py-4 px-6 mb-8 justify-between">
+        <!-- New navigation icon for main page -->
+        <div id="main-page-nav" class="purple-gradient p-3 rounded-2xl cursor-pointer hover:opacity-80 transition-opacity btn-shadow">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M16.2 7.8L7.8 16.2" />
+                <path d="M16.2 16.2L7.8 7.8" />
+            </svg>
+        </div>
+        
+        <h1 class="text-2xl font-bold text-gray-100 flex-grow text-center">AGS Sınav Takibi</h1>
+        
         <div class="relative">
             <input type="text" placeholder="Konu ara..." class="bg-[#1a1e35] text-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -225,6 +231,7 @@
             const minutesInput = document.getElementById('minutes-input');
             const confirmCustomizeBtn = document.getElementById('confirm-customize');
             const cancelCustomizeBtn = document.getElementById('cancel-customize');
+            const mainPageNav = document.getElementById('main-page-nav');
             
             // Audio setup for a relaxing church bell sound
             const bellSynth = new Tone.MembraneSynth({
@@ -261,7 +268,8 @@
                 breakDuration: parseInt(localStorage.getItem('breakDuration')) || 5 * 60,
                 longBreakDuration: parseInt(localStorage.getItem('longBreakDuration')) || 15 * 60,
                 studyTimeSaved: 0,
-                studyRecords: []
+                studyRecords: [],
+                startTime: 0 // Added to track start time for accurate time keeping
             };
 
             const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110;
@@ -295,11 +303,16 @@
                 pauseBtn.classList.remove('hidden');
                 stopBtn.classList.remove('hidden');
 
+                // Set the start time
+                appState.startTime = Date.now();
+
                 // Play the bell sound when the timer starts
                 playChurchBell();
 
                 appState.timer = setInterval(() => {
-                    appState.timeRemaining--;
+                    const elapsedTime = Date.now() - appState.startTime;
+                    appState.timeRemaining = appState.initialDuration - Math.floor(elapsedTime / 1000);
+
                     if (appState.timeRemaining <= 0) {
                         clearInterval(appState.timer);
                         appState.isPaused = true;
@@ -325,6 +338,8 @@
             const pauseTimer = () => {
                 clearInterval(appState.timer);
                 appState.isPaused = true;
+                // Update the initial duration with the current remaining time
+                appState.initialDuration = appState.timeRemaining; 
                 startBtn.classList.remove('hidden');
                 pauseBtn.classList.add('hidden');
             };
@@ -335,6 +350,7 @@
                 appState.isBreak = isBreak;
                 appState.timeRemaining = duration;
                 appState.initialDuration = duration;
+                appState.startTime = 0; // Reset start time
                 updateTimerDisplay(appState.timeRemaining);
                 updateProgressCircle();
                 statusText.textContent = isBreak ? 'Break' : 'Study Session';
@@ -554,6 +570,11 @@
             cancelCustomizeBtn.addEventListener('click', () => {
                 customizeModal.classList.remove('flex');
                 customizeModal.classList.add('hidden');
+            });
+            mainPageNav.addEventListener('click', () => {
+                // In a multi-page app, this would navigate to the main page.
+                // Since this is a single file, we'll just log to the console.
+                console.log('Navigating to main page...');
             });
 
             calendarContainer.addEventListener('click', (e) => {

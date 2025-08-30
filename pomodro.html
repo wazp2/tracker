@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGS Sınav Takibi - Pomodoro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
@@ -220,6 +221,31 @@
             const minutesInput = document.getElementById('minutes-input');
             const confirmCustomizeBtn = document.getElementById('confirm-customize');
             const cancelCustomizeBtn = document.getElementById('cancel-customize');
+            
+            // Audio setup for a relaxing church bell sound
+            const bellSynth = new Tone.MembraneSynth({
+                pitchDecay: 0.05,
+                octaves: 1,
+                oscillator: {
+                    type: "sine"
+                },
+                envelope: {
+                    attack: 0.001,
+                    decay: 1.5,
+                    sustain: 0,
+                    release: 0.2
+                }
+            });
+            
+            const reverb = new Tone.Reverb({
+                decay: 5,
+                wet: 0.5
+            }).toDestination();
+            
+            const volume = new Tone.Volume(-10).toDestination();
+
+            bellSynth.connect(reverb);
+            reverb.connect(volume);
 
             const appState = {
                 timer: null,
@@ -251,12 +277,22 @@
                 progressCircle.style.strokeDashoffset = offset;
             };
 
+            const playChurchBell = () => {
+                // Play a low C note to sound like a deep bell
+                const now = Tone.now();
+                bellSynth.triggerAttackRelease("C3", "4n", now);
+            };
+
             const startTimer = () => {
                 if (!appState.isPaused) return;
+                Tone.start(); // Start the audio context on user gesture
                 appState.isPaused = false;
                 startBtn.classList.add('hidden');
                 pauseBtn.classList.remove('hidden');
                 stopBtn.classList.remove('hidden');
+
+                // Play the bell sound when the timer starts
+                playChurchBell();
 
                 appState.timer = setInterval(() => {
                     appState.timeRemaining--;
@@ -264,6 +300,9 @@
                         clearInterval(appState.timer);
                         appState.isPaused = true;
                         
+                        // Play the bell sound when the timer finishes
+                        playChurchBell();
+
                         if (!appState.isBreak) {
                             appState.studyTimeSaved = appState.initialDuration;
                             modalTime.textContent = `${Math.floor(appState.studyTimeSaved / 60)} minutes`;

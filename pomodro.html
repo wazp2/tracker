@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGS Sınav Takibi - Pomodoro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0f1c;
+            color: #d1d5db;
+        }
+        .container-bg {
+            background-color: #1a1e35;
+        }
+        .purple-gradient {
+            background: linear-gradient(90deg, #6c47ff, #8e47ff);
+        }
+        .box-shadow {
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .progress-ring-bg {
+            stroke: #2d325a;
+        }
+        .progress-ring-fg {
+            stroke: #8e47ff;
+            transition: stroke-dasharray 0.5s linear;
+        }
+        .btn-shadow {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .btn-base {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-base:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-[#0d0f1c] text-gray-300 min-h-screen flex flex-col items-center p-4">
+
+    <!-- Header -->
+    <header class="w-full max-w-4xl flex justify-between items-center py-4 px-6 mb-8">
+        <h1 class="text-2xl font-bold text-gray-100">AGS Sınav Takibi</h1>
+        <div class="relative">
+            <input type="text" placeholder="Konu ara..." class="bg-[#1a1e35] text-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column: Timer & Settings -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- Pomodoro Timer Card -->
+            <div class="container-bg rounded-3xl p-8 box-shadow flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-6 text-gray-200">Pomodoro Timer</h2>
+
+                <!-- Timer Display -->
+                <div class="relative w-64 h-64 mb-6">
+                    <svg class="w-full h-full transform -rotate-90">
+                        <circle class="progress-ring-bg" stroke-width="12" fill="transparent" r="110" cx="128" cy="128" />
+                        <circle id="progress-circle" class="progress-ring-fg" stroke-width="12" fill="transparent" r="110" cx="128" cy="128" style="stroke-dasharray: 691.15; stroke-dashoffset: 691.15;"></circle>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="timer-display" class="text-5xl font-bold text-gray-100 mb-2 cursor-pointer">25:00</span>
+                        <span id="status-text" class="text-purple-400 font-medium">Study Session</span>
+                    </div>
+                </div>
+
+                <!-- Timer Controls -->
+                <div class="flex items-center space-x-4 mb-6">
+                    <button id="start-btn" class="purple-gradient text-white px-8 py-3 rounded-full font-semibold btn-base btn-shadow flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                        </svg>
+                        Start
+                    </button>
+                    <button id="pause-btn" class="bg-gray-700 text-gray-300 px-8 py-3 rounded-full font-semibold btn-base btn-shadow hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button id="stop-btn" class="bg-gray-700 text-gray-300 px-6 py-3 rounded-full font-semibold btn-base btn-shadow hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button id="reset-btn" class="bg-gray-700 text-gray-300 px-6 py-3 rounded-full font-semibold btn-base btn-shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM10 5a1 1 0 00-1 1v2a1 1 0 002 0V6a1 1 0 00-1-1zm3 1a1 1 0 10-2 0v2a1 1 0 102 0V6zm-6 0a1 1 0 10-2 0v2a1 1 0 102 0V6zm6 5a1 1 0 10-2 0v2a1 1 0 102 0v-2z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Timer Settings -->
+                <div class="w-full max-w-sm flex justify-around text-gray-400 font-medium">
+                    <button id="set-study" class="p-2 rounded-full hover:bg-gray-700">Study</button>
+                    <button id="set-break" class="p-2 rounded-full hover:bg-gray-700">Short Break</button>
+                    <button id="set-long-break" class="p-2 rounded-full hover:bg-gray-700">Long Break</button>
+                </div>
+            </div>
+
+            <!-- Study Records Calendar -->
+            <div class="container-bg rounded-3xl p-8 box-shadow">
+                <h2 class="text-xl font-semibold mb-6 text-gray-200">Study Progress</h2>
+                <div id="calendar-container" class="grid grid-cols-7 gap-1 text-center">
+                    <!-- Calendar days will be rendered here by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Stats -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="container-bg rounded-3xl p-8 box-shadow purple-gradient">
+                <span id="completed-sessions-count" class="text-5xl font-bold text-gray-100">0</span>
+                <p class="mt-2 text-gray-200">Completed Sessions</p>
+            </div>
+            <div class="container-bg rounded-3xl p-8 box-shadow">
+                <span id="total-study-time" class="text-5xl font-bold text-gray-100">0</span>
+                <p class="mt-2 text-gray-400">Total Study Time (minutes)</p>
+            </div>
+            <div class="container-bg rounded-3xl p-8 box-shadow">
+                <h3 class="text-xl font-semibold mb-4 text-gray-200">Monthly Analytics</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Total Study Time</span>
+                        <span id="monthly-study-time" class="text-gray-200 font-semibold">0 minutes</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Sessions Completed</span>
+                        <span id="monthly-sessions-count" class="text-gray-200 font-semibold">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Saving Study Session -->
+    <div id="save-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
+        <div class="container-bg rounded-3xl p-8 w-full max-w-md box-shadow">
+            <h3 class="text-xl font-semibold text-gray-100 mb-4">Save Study Session</h3>
+            <p class="text-gray-300 mb-4">You studied for <span id="modal-time" class="font-bold text-purple-400"></span>.</p>
+            <div class="mb-4">
+                <label for="subject-input" class="block text-gray-400 text-sm font-medium mb-2">Subject (Optional)</label>
+                <input type="text" id="subject-input" placeholder="e.g., Matematik" class="w-full bg-[#0d0f1c] text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-save" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">Cancel</button>
+                <button id="confirm-save" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Daily Details -->
+    <div id="daily-details-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
+        <div class="container-bg rounded-3xl p-8 w-full max-w-md box-shadow">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="daily-details-date" class="text-xl font-semibold text-gray-100"></h3>
+                <button id="close-daily-details" class="text-gray-400 hover:text-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="daily-sessions-list" class="space-y-4">
+                <!-- Sessions will be rendered here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Timer Customization -->
+    <div id="customize-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
+        <div class="container-bg rounded-3xl p-8 w-full max-w-md box-shadow">
+            <h3 class="text-xl font-semibold text-gray-100 mb-4">Customize Timer</h3>
+            <p class="text-gray-300 mb-4">Set the duration in minutes.</p>
+            <div class="mb-4">
+                <label for="minutes-input" class="block text-gray-400 text-sm font-medium mb-2">Minutes</label>
+                <input type="number" id="minutes-input" min="1" max="120" class="w-full bg-[#0d0f1c] text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-customize" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">Cancel</button>
+                <button id="confirm-customize" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        window.onload = function() {
+            const timerDisplay = document.getElementById('timer-display');
+            const statusText = document.getElementById('status-text');
+            const startBtn = document.getElementById('start-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const progressCircle = document.getElementById('progress-circle');
+            const calendarContainer = document.getElementById('calendar-container');
+            const saveModal = document.getElementById('save-modal');
+            const modalTime = document.getElementById('modal-time');
+            const subjectInput = document.getElementById('subject-input');
+            const confirmSaveBtn = document.getElementById('confirm-save');
+            const cancelSaveBtn = document.getElementById('cancel-save');
+            const completedSessionsCount = document.getElementById('completed-sessions-count');
+            const totalStudyTimeDisplay = document.getElementById('total-study-time');
+            const monthlyStudyTime = document.getElementById('monthly-study-time');
+            const monthlySessionsCount = document.getElementById('monthly-sessions-count');
+            const dailyDetailsModal = document.getElementById('daily-details-modal');
+            const dailyDetailsDate = document.getElementById('daily-details-date');
+            const dailySessionsList = document.getElementById('daily-sessions-list');
+            const closeDailyDetailsBtn = document.getElementById('close-daily-details');
+            const customizeModal = document.getElementById('customize-modal');
+            const minutesInput = document.getElementById('minutes-input');
+            const confirmCustomizeBtn = document.getElementById('confirm-customize');
+            const cancelCustomizeBtn = document.getElementById('cancel-customize');
+
+            const appState = {
+                timer: null,
+                timeRemaining: 0,
+                initialDuration: 0,
+                isPaused: true,
+                isBreak: false,
+                studyDuration: parseInt(localStorage.getItem('studyDuration')) || 25 * 60,
+                breakDuration: parseInt(localStorage.getItem('breakDuration')) || 5 * 60,
+                longBreakDuration: parseInt(localStorage.getItem('longBreakDuration')) || 15 * 60,
+                studyTimeSaved: 0,
+                studyRecords: []
+            };
+
+            const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110;
+            progressCircle.style.strokeDasharray = CIRCLE_CIRCUMFERENCE;
+            
+            let currentTimerType = 'study'; // 'study', 'break', or 'longBreak'
+
+            const updateTimerDisplay = (time) => {
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60);
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            };
+
+            const updateProgressCircle = () => {
+                const percent = (appState.timeRemaining / appState.initialDuration) * 100;
+                const offset = CIRCLE_CIRCUMFERENCE - (percent / 100) * CIRCLE_CIRCUMFERENCE;
+                progressCircle.style.strokeDashoffset = offset;
+            };
+
+            const startTimer = () => {
+                if (!appState.isPaused) return;
+                appState.isPaused = false;
+                startBtn.classList.add('hidden');
+                pauseBtn.classList.remove('hidden');
+                stopBtn.classList.remove('hidden');
+
+                appState.timer = setInterval(() => {
+                    appState.timeRemaining--;
+                    if (appState.timeRemaining <= 0) {
+                        clearInterval(appState.timer);
+                        appState.isPaused = true;
+                        
+                        if (!appState.isBreak) {
+                            appState.studyTimeSaved = appState.initialDuration;
+                            modalTime.textContent = `${Math.floor(appState.studyTimeSaved / 60)} minutes`;
+                            saveModal.classList.remove('hidden');
+                            saveModal.classList.add('flex');
+                        } else {
+                            appState.isBreak = false;
+                            resetTimer(appState.studyDuration, false);
+                        }
+                    }
+                    updateTimerDisplay(appState.timeRemaining);
+                    updateProgressCircle();
+                }, 1000);
+            };
+
+            const pauseTimer = () => {
+                clearInterval(appState.timer);
+                appState.isPaused = true;
+                startBtn.classList.remove('hidden');
+                pauseBtn.classList.add('hidden');
+            };
+
+            const resetTimer = (duration = appState.studyDuration, isBreak = false) => {
+                clearInterval(appState.timer);
+                appState.isPaused = true;
+                appState.isBreak = isBreak;
+                appState.timeRemaining = duration;
+                appState.initialDuration = duration;
+                updateTimerDisplay(appState.timeRemaining);
+                updateProgressCircle();
+                statusText.textContent = isBreak ? 'Break' : 'Study Session';
+                startBtn.classList.remove('hidden');
+                pauseBtn.classList.add('hidden');
+                stopBtn.classList.add('hidden');
+                subjectInput.value = '';
+            };
+
+            const saveAndReset = () => {
+                clearInterval(appState.timer);
+                const timeStudied = appState.initialDuration - appState.timeRemaining;
+                appState.studyTimeSaved = timeStudied;
+                modalTime.textContent = `${Math.floor(appState.studyTimeSaved / 60)} minutes`;
+                saveModal.classList.remove('hidden');
+                saveModal.classList.add('flex');
+            };
+
+            const saveStudyRecord = () => {
+                if (appState.studyTimeSaved <= 0) {
+                    closeModal();
+                    return;
+                }
+                const record = {
+                    minutes: Math.floor(appState.studyTimeSaved / 60),
+                    subject: subjectInput.value || 'General',
+                    date: new Date().toISOString().split('T')[0]
+                };
+
+                appState.studyRecords.push(record);
+                localStorage.setItem('studyRecords', JSON.stringify(appState.studyRecords));
+                
+                appState.studyTimeSaved = 0;
+                loadRecordsAndRender();
+                closeModal();
+                resetTimer();
+            };
+
+            const closeModal = () => {
+                saveModal.classList.remove('flex');
+                saveModal.classList.add('hidden');
+            };
+
+            const loadRecordsAndRender = () => {
+                const records = JSON.parse(localStorage.getItem('studyRecords')) || [];
+                appState.studyRecords = records;
+                renderCalendar(records);
+                updateAnalytics(records);
+            };
+            
+            const updateAnalytics = (records) => {
+                const totalMinutes = records.reduce((sum, record) => sum + record.minutes, 0);
+                const totalSessions = records.length;
+                totalStudyTimeDisplay.textContent = totalMinutes;
+                completedSessionsCount.textContent = totalSessions;
+
+                const today = new Date();
+                const currentMonth = today.getMonth();
+                const currentYear = today.getFullYear();
+                
+                const monthlyRecords = records.filter(record => {
+                    const recordDate = new Date(record.date);
+                    return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+                });
+                
+                const monthlyMinutes = monthlyRecords.reduce((sum, record) => sum + record.minutes, 0);
+                monthlyStudyTime.textContent = `${monthlyMinutes} minutes`;
+                monthlySessionsCount.textContent = monthlyRecords.length;
+            };
+
+            const renderCalendar = (records) => {
+                calendarContainer.innerHTML = '';
+                const today = new Date();
+                const currentMonth = today.getMonth();
+                const currentYear = today.getFullYear();
+                const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+                const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+                const dailyStudyMap = records.reduce((acc, record) => {
+                    const date = new Date(record.date);
+                    const day = date.getDate();
+                    acc[day] = (acc[day] || 0) + record.minutes;
+                    return acc;
+                }, {});
+
+                const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                daysOfWeek.forEach(day => {
+                    const el = document.createElement('div');
+                    el.className = 'text-xs font-semibold text-gray-500';
+                    el.textContent = day;
+                    calendarContainer.appendChild(el);
+                });
+
+                for (let i = 0; i < firstDayOfMonth; i++) {
+                    const emptyDiv = document.createElement('div');
+                    calendarContainer.appendChild(emptyDiv);
+                }
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'day-cell flex flex-col items-center justify-center p-1 rounded-lg transition-colors cursor-pointer hover:bg-gray-700';
+                    dayDiv.dataset.day = i;
+
+                    const studyMinutes = dailyStudyMap[i] || 0;
+                    
+                    if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                        dayDiv.classList.add('ring-2', 'ring-purple-400');
+                    }
+                    
+                    if (studyMinutes > 0) {
+                        let bgColor;
+                        if (studyMinutes < 30) bgColor = 'bg-purple-900';
+                        else if (studyMinutes < 60) bgColor = 'bg-purple-800';
+                        else if (studyMinutes < 120) bgColor = 'bg-purple-700';
+                        else bgColor = 'bg-purple-600';
+                        dayDiv.classList.add(bgColor);
+                    }
+                    
+                    const dayNumber = document.createElement('span');
+                    dayNumber.className = 'text-gray-200 font-medium';
+                    dayNumber.textContent = i;
+                    dayDiv.appendChild(dayNumber);
+
+                    const studyTime = document.createElement('span');
+                    studyTime.className = 'text-[10px] text-gray-400 mt-1';
+                    if (studyMinutes > 0) {
+                        studyTime.textContent = `${studyMinutes}m`;
+                    }
+                    dayDiv.appendChild(studyTime);
+                    calendarContainer.appendChild(dayDiv);
+                }
+            };
+            
+            const showDailyDetails = (day) => {
+                const today = new Date();
+                const dateString = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                
+                const sessionsForDay = appState.studyRecords.filter(record => record.date === dateString);
+                
+                dailyDetailsDate.textContent = dateString;
+                dailySessionsList.innerHTML = '';
+
+                if (sessionsForDay.length === 0) {
+                    dailySessionsList.innerHTML = '<p class="text-gray-400 text-center">No study sessions on this day.</p>';
+                } else {
+                    sessionsForDay.forEach(session => {
+                        const sessionDiv = document.createElement('div');
+                        sessionDiv.className = 'bg-gray-700 rounded-xl p-4 flex justify-between items-center';
+                        sessionDiv.innerHTML = `
+                            <div>
+                                <p class="text-lg font-semibold text-gray-100">${session.subject}</p>
+                            </div>
+                            <span class="text-lg font-bold text-purple-400">${session.minutes}m</span>
+                        `;
+                        dailySessionsList.appendChild(sessionDiv);
+                    });
+                }
+                
+                dailyDetailsModal.classList.remove('hidden');
+                dailyDetailsModal.classList.add('flex');
+            };
+            
+            const showCustomizeModal = () => {
+                const minutes = Math.floor(appState.initialDuration / 60);
+                minutesInput.value = minutes;
+                customizeModal.classList.remove('hidden');
+                customizeModal.classList.add('flex');
+            };
+            
+            const saveCustomTimer = () => {
+                const newMinutes = parseInt(minutesInput.value);
+                if (newMinutes > 0) {
+                    const newDuration = newMinutes * 60;
+                    if (currentTimerType === 'study') {
+                        appState.studyDuration = newDuration;
+                        localStorage.setItem('studyDuration', newDuration);
+                    } else if (currentTimerType === 'break') {
+                        appState.breakDuration = newDuration;
+                        localStorage.setItem('breakDuration', newDuration);
+                    } else if (currentTimerType === 'longBreak') {
+                        appState.longBreakDuration = newDuration;
+                        localStorage.setItem('longBreakDuration', newDuration);
+                    }
+                    resetTimer(newDuration, currentTimerType !== 'study');
+                }
+                customizeModal.classList.remove('flex');
+                customizeModal.classList.add('hidden');
+            };
+
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            stopBtn.addEventListener('click', saveAndReset);
+            resetBtn.addEventListener('click', () => resetTimer());
+            document.getElementById('set-study').addEventListener('click', () => {
+                currentTimerType = 'study';
+                resetTimer(appState.studyDuration);
+            });
+            document.getElementById('set-break').addEventListener('click', () => {
+                currentTimerType = 'break';
+                resetTimer(appState.breakDuration, true);
+            });
+            document.getElementById('set-long-break').addEventListener('click', () => {
+                currentTimerType = 'longBreak';
+                resetTimer(appState.longBreakDuration, true);
+            });
+            confirmSaveBtn.addEventListener('click', saveStudyRecord);
+            cancelSaveBtn.addEventListener('click', () => {
+                resetTimer();
+                closeModal();
+            });
+            closeDailyDetailsBtn.addEventListener('click', () => {
+                dailyDetailsModal.classList.remove('flex');
+                dailyDetailsModal.classList.add('hidden');
+            });
+            timerDisplay.addEventListener('click', showCustomizeModal);
+            confirmCustomizeBtn.addEventListener('click', saveCustomTimer);
+            cancelCustomizeBtn.addEventListener('click', () => {
+                customizeModal.classList.remove('flex');
+                customizeModal.classList.add('hidden');
+            });
+
+            calendarContainer.addEventListener('click', (e) => {
+                const dayCell = e.target.closest('.day-cell');
+                if (dayCell) {
+                    const day = dayCell.dataset.day;
+                    if (day) {
+                        showDailyDetails(parseInt(day));
+                    }
+                }
+            });
+
+            resetTimer();
+            loadRecordsAndRender();
+        };
+    </script>
+</body>
+</html>

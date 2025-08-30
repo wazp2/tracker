@@ -39,6 +39,19 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
         }
+        .subject-btn.selected {
+            background-color: #6c47ff !important;
+            border: 2px solid #8e47ff;
+        }
+        /* New animation added */
+        @keyframes pulse-success {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(142, 71, 255, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 10px rgba(142, 71, 255, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(142, 71, 255, 0); }
+        }
+        .animate-pulse-success {
+            animation: pulse-success 0.6s ease-out;
+        }
     </style>
 </head>
 <body class="bg-[#0d0f1c] text-gray-300 min-h-screen flex flex-col items-center p-4">
@@ -46,15 +59,15 @@
     <!-- Header -->
     <header class="w-full max-w-4xl flex items-center py-4 px-6 mb-8 justify-between">
         <!-- New navigation icon for main page -->
-        <div id="main-page-nav" class="purple-gradient p-3 rounded-2xl cursor-pointer hover:opacity-80 transition-opacity btn-shadow">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M16.2 7.8L7.8 16.2" />
-                <path d="M16.2 16.2L7.8 7.8" />
+        <a href="/" class="purple-gradient p-3 rounded-2xl cursor-pointer hover:opacity-80 transition-opacity btn-shadow">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-        </div>
+        </a>
         
-        <h1 class="text-2xl font-bold text-gray-100 flex-grow text-center">AGS Sınav Takibi</h1>
+        <div class="flex flex-col items-center flex-grow">
+            <h1 class="text-2xl font-bold text-gray-100 text-center">AGS Sınav Takibi</h1>
+        </div>
         
         <div class="relative">
             <input type="text" placeholder="Konu ara..." class="bg-[#1a1e35] text-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
@@ -81,47 +94,57 @@
                         <circle id="progress-circle" class="progress-ring-fg" stroke-width="12" fill="transparent" r="110" cx="128" cy="128" style="stroke-dasharray: 691.15; stroke-dashoffset: 691.15;"></circle>
                     </svg>
                     <div class="absolute inset-0 flex flex-col items-center justify-center">
-                        <span id="timer-display" class="text-5xl font-bold text-gray-100 mb-2 cursor-pointer">25:00</span>
-                        <span id="status-text" class="text-purple-400 font-medium">Study Session</span>
+                        <span id="timer-display" class="text-6xl font-bold text-gray-100 mb-2 cursor-pointer">25:00</span>
+                        <span id="status-text" class="text-purple-400 font-medium text-lg">Study Session</span>
                     </div>
                 </div>
 
                 <!-- Timer Controls -->
-                <div class="flex items-center space-x-4 mb-6">
-                    <button id="start-btn" class="purple-gradient text-white px-8 py-3 rounded-full font-semibold btn-base btn-shadow flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <div class="flex items-center justify-center space-x-4 mb-6">
+                    <!-- Başlangıç düğmesi -->
+                    <button id="start-btn" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base btn-shadow flex items-center text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                         </svg>
-                        Start
+                        Başla
                     </button>
-                    <button id="pause-btn" class="bg-gray-700 text-gray-300 px-8 py-3 rounded-full font-semibold btn-base btn-shadow hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    <!-- Duraklat/Devam et düğmesi (zamanlayıcı çalışırken görünecek) -->
+                    <button id="pause-resume-btn" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base btn-shadow hidden flex items-center text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6 6h4v12H6zM14 6h4v12h-4z" />
                         </svg>
+                        Duraklat
                     </button>
-                    <button id="stop-btn" class="bg-gray-700 text-gray-300 px-6 py-3 rounded-full font-semibold btn-base btn-shadow hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd" />
+                    <!-- Durdurma ve Kaydetme düğmesi (zamanlayıcı çalışırken görünecek) -->
+                    <button id="stop-save-btn" class="bg-red-600 text-white px-6 py-2 rounded-full font-semibold btn-base btn-shadow hidden flex items-center text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6 6h12v12H6z" />
                         </svg>
+                        Kaydet
                     </button>
-                    <button id="reset-btn" class="bg-gray-700 text-gray-300 px-6 py-3 rounded-full font-semibold btn-base btn-shadow">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM10 5a1 1 0 00-1 1v2a1 1 0 002 0V6a1 1 0 00-1-1zm3 1a1 1 0 10-2 0v2a1 1 0 102 0V6zm-6 0a1 1 0 10-2 0v2a1 1 0 102 0V6zm6 5a1 1 0 10-2 0v2a1 1 0 102 0v-2z" clip-rule="evenodd" />
+                    <!-- Sıfırlama düğmesi -->
+                    <button id="reset-btn" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base btn-shadow flex items-center text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 4v6h-6"></path>
+                            <path d="M1 20v-6h6"></path>
+                            <path d="M3.52 10C4.65 6.55 8.35 4 12 4s7.35 2.55 8.48 6"></path>
+                            <path d="M20.48 14c-1.13 3.45-4.83 6-8.48 6s-7.35-2.55-8.48-6"></path>
                         </svg>
+                        Sıfırla
                     </button>
                 </div>
 
                 <!-- Timer Settings -->
-                <div class="w-full max-w-sm flex justify-around text-gray-400 font-medium">
-                    <button id="set-study" class="p-2 rounded-full hover:bg-gray-700">Study</button>
-                    <button id="set-break" class="p-2 rounded-full hover:bg-gray-700">Short Break</button>
-                    <button id="set-long-break" class="p-2 rounded-full hover:bg-gray-700">Long Break</button>
+                <div class="w-full max-w-sm flex justify-around text-gray-400 font-medium text-sm">
+                    <button id="set-study" class="p-2 rounded-full hover:bg-gray-700">Çalışma</button>
+                    <button id="set-break" class="p-2 rounded-full hover:bg-gray-700">Kısa Mola</button>
+                    <button id="set-long-break" class="p-2 rounded-full hover:bg-gray-700">Uzun Mola</button>
                 </div>
             </div>
 
             <!-- Study Records Calendar -->
             <div class="container-bg rounded-3xl p-8 box-shadow">
-                <h2 class="text-xl font-semibold mb-6 text-gray-200">Study Progress</h2>
+                <h2 class="text-xl font-semibold mb-6 text-gray-200">Çalışma Takibi</h2>
                 <div id="calendar-container" class="grid grid-cols-7 gap-1 text-center">
                     <!-- Calendar days will be rendered here by JS -->
                 </div>
@@ -132,21 +155,21 @@
         <div class="lg:col-span-1 space-y-6">
             <div class="container-bg rounded-3xl p-8 box-shadow purple-gradient">
                 <span id="completed-sessions-count" class="text-5xl font-bold text-gray-100">0</span>
-                <p class="mt-2 text-gray-200">Completed Sessions</p>
+                <p class="mt-2 text-gray-200">Tamamlanan Oturumlar</p>
             </div>
             <div class="container-bg rounded-3xl p-8 box-shadow">
                 <span id="total-study-time" class="text-5xl font-bold text-gray-100">0</span>
-                <p class="mt-2 text-gray-400">Total Study Time (minutes)</p>
+                <p class="mt-2 text-gray-400">Toplam Çalışma Süresi (dakika)</p>
             </div>
             <div class="container-bg rounded-3xl p-8 box-shadow">
-                <h3 class="text-xl font-semibold mb-4 text-gray-200">Monthly Analytics</h3>
+                <h3 class="text-xl font-semibold mb-4 text-gray-200">Aylık Analizler</h3>
                 <div class="space-y-4">
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-400">Total Study Time</span>
+                        <span class="text-gray-400">Toplam Çalışma Süresi</span>
                         <span id="monthly-study-time" class="text-gray-200 font-semibold">0 minutes</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-400">Sessions Completed</span>
+                        <span class="text-gray-400">Tamamlanan Oturumlar</span>
                         <span id="monthly-sessions-count" class="text-gray-200 font-semibold">0</span>
                     </div>
                 </div>
@@ -157,15 +180,24 @@
     <!-- Modal for Saving Study Session -->
     <div id="save-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
         <div class="container-bg rounded-3xl p-8 w-full max-w-md box-shadow">
-            <h3 class="text-xl font-semibold text-gray-100 mb-4">Save Study Session</h3>
-            <p class="text-gray-300 mb-4">You studied for <span id="modal-time" class="font-bold text-purple-400"></span>.</p>
+            <h3 id="modal-title" class="text-xl font-semibold text-gray-100 mb-4">Yeni Oturum Başlat</h3>
+            <p id="modal-message" class="text-gray-300 mb-4">Zamanlayıcıyı başlatmadan önce bir konu seçin.</p>
             <div class="mb-4">
-                <label for="subject-input" class="block text-gray-400 text-sm font-medium mb-2">Subject (Optional)</label>
-                <input type="text" id="subject-input" placeholder="e.g., Matematik" class="w-full bg-[#0d0f1c] text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
+                <label for="custom-subject-input" class="block text-gray-400 text-sm font-medium mb-2">Konu Adını Girin</label>
+                <input type="text" id="custom-subject-input" placeholder="Konu adımı kendim belirleyeceğim..." class="w-full bg-[#0d0f1c] text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8e47ff]" />
+                <div id="subject-grid" class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Sözel Yetenek">Sözel Yetenek</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Sayısal Yetenek">Sayısal Yetenek</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Tarih">Tarih</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Türkiye Coğrafyası">Türkiye Coğrafyası</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Eğitimin Temelleri ve Türk Milli Eğitim Sistemi">Eğitimin Temelleri ve Türk Milli Eğitim Sistemi</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Mevzuat">Mevzuat</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Diğer">Diğer</button>
+                </div>
             </div>
             <div class="flex justify-end space-x-3">
-                <button id="cancel-save" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">Cancel</button>
-                <button id="confirm-save" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Save</button>
+                <button id="cancel-save" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">İptal</button>
+                <button id="confirm-save" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Oturumu Başlat</button>
             </div>
         </div>
     </div>
@@ -190,34 +222,39 @@
     <!-- Modal for Timer Customization -->
     <div id="customize-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
         <div class="container-bg rounded-3xl p-8 w-full max-w-md box-shadow">
-            <h3 class="text-xl font-semibold text-gray-100 mb-4">Customize Timer</h3>
-            <p class="text-gray-300 mb-4">Set the duration in minutes.</p>
+            <h3 class="text-xl font-semibold text-gray-100 mb-4">Zamanlayıcıyı Özelleştir</h3>
+            <p class="text-gray-300 mb-4">Süreyi dakikalarla belirleyin.</p>
             <div class="mb-4">
-                <label for="minutes-input" class="block text-gray-400 text-sm font-medium mb-2">Minutes</label>
+                <label for="minutes-input" class="block text-gray-400 text-sm font-medium mb-2">Dakika</label>
                 <input type="number" id="minutes-input" min="1" max="120" class="w-full bg-[#0d0f1c] text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
             </div>
             <div class="flex justify-end space-x-3">
-                <button id="cancel-customize" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">Cancel</button>
-                <button id="confirm-customize" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Save</button>
+                <button id="cancel-customize" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">İptal</button>
+                <button id="confirm-customize" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Kaydet</button>
             </div>
         </div>
     </div>
-
+    <!-- Message Box for Alerts -->
+    <div id="message-box" class="fixed bottom-4 right-4 p-4 rounded-xl bg-purple-700 text-white shadow-xl hidden transition-all duration-300 transform scale-95 opacity-0">
+      <p id="message-text"></p>
+    </div>
 
     <script>
         window.onload = function() {
             const timerDisplay = document.getElementById('timer-display');
             const statusText = document.getElementById('status-text');
             const startBtn = document.getElementById('start-btn');
-            const pauseBtn = document.getElementById('pause-btn');
-            const stopBtn = document.getElementById('stop-btn');
+            const pauseResumeBtn = document.getElementById('pause-resume-btn');
+            const stopSaveBtn = document.getElementById('stop-save-btn');
             const resetBtn = document.getElementById('reset-btn');
             const progressCircle = document.getElementById('progress-circle');
             const calendarContainer = document.getElementById('calendar-container');
             const saveModal = document.getElementById('save-modal');
-            const modalTime = document.getElementById('modal-time');
-            const subjectInput = document.getElementById('subject-input');
-            const confirmSaveBtn = document.getElementById('confirm-save');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const subjectGrid = document.getElementById('subject-grid');
+            const customSubjectInput = document.getElementById('custom-subject-input');
+            const startSessionBtn = document.getElementById('confirm-save');
             const cancelSaveBtn = document.getElementById('cancel-save');
             const completedSessionsCount = document.getElementById('completed-sessions-count');
             const totalStudyTimeDisplay = document.getElementById('total-study-time');
@@ -231,7 +268,8 @@
             const minutesInput = document.getElementById('minutes-input');
             const confirmCustomizeBtn = document.getElementById('confirm-customize');
             const cancelCustomizeBtn = document.getElementById('cancel-customize');
-            const mainPageNav = document.getElementById('main-page-nav');
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
             
             // Audio setup for a relaxing church bell sound
             const bellSynth = new Tone.MembraneSynth({
@@ -267,15 +305,29 @@
                 studyDuration: parseInt(localStorage.getItem('studyDuration')) || 25 * 60,
                 breakDuration: parseInt(localStorage.getItem('breakDuration')) || 5 * 60,
                 longBreakDuration: parseInt(localStorage.getItem('longBreakDuration')) || 15 * 60,
-                studyTimeSaved: 0,
                 studyRecords: [],
-                startTime: 0 // Added to track start time for accurate time keeping
+                startTime: 0,
+                selectedSubject: null, // Store selected subject from the grid
+                isSessionActive: false
             };
 
             const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110;
             progressCircle.style.strokeDasharray = CIRCLE_CIRCUMFERENCE;
             
             let currentTimerType = 'study'; // 'study', 'break', or 'longBreak'
+
+            const showMessage = (text, duration = 3000) => {
+              messageText.textContent = text;
+              messageBox.classList.remove('hidden');
+              messageBox.classList.add('scale-100', 'opacity-100');
+              setTimeout(() => {
+                messageBox.classList.remove('scale-100', 'opacity-100');
+                messageBox.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                  messageBox.classList.add('hidden');
+                }, 300);
+              }, duration);
+            };
 
             const updateTimerDisplay = (time) => {
                 const minutes = Math.floor(time / 60);
@@ -289,25 +341,41 @@
                 progressCircle.style.strokeDashoffset = offset;
             };
 
-            const playChurchBell = () => {
+            const playBell = () => {
                 // Play a low C note to sound like a deep bell
                 const now = Tone.now();
                 bellSynth.triggerAttackRelease("C3", "4n", now);
             };
 
+            const updateButtons = (isTimerActive) => {
+                if (isTimerActive) {
+                    startBtn.classList.add('hidden');
+                    pauseResumeBtn.classList.remove('hidden');
+                    stopSaveBtn.classList.remove('hidden');
+                } else {
+                    startBtn.classList.remove('hidden');
+                    pauseResumeBtn.classList.add('hidden');
+                    stopSaveBtn.classList.add('hidden');
+                    pauseResumeBtn.textContent = 'Duraklat';
+                }
+            };
+            
             const startTimer = () => {
                 if (!appState.isPaused) return;
                 Tone.start(); // Start the audio context on user gesture
                 appState.isPaused = false;
-                startBtn.classList.add('hidden');
-                pauseBtn.classList.remove('hidden');
-                stopBtn.classList.remove('hidden');
+                appState.isSessionActive = true;
+                
+                updateButtons(true);
+                pauseResumeBtn.textContent = 'Duraklat';
+                pauseResumeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h4v12H6zM14 6h4v12h-4z" /></svg>Duraklat`;
+
 
                 // Set the start time
-                appState.startTime = Date.now();
+                appState.startTime = Date.now() - (appState.initialDuration - appState.timeRemaining) * 1000;
 
                 // Play the bell sound when the timer starts
-                playChurchBell();
+                playBell();
 
                 appState.timer = setInterval(() => {
                     const elapsedTime = Date.now() - appState.startTime;
@@ -318,13 +386,16 @@
                         appState.isPaused = true;
                         
                         // Play the bell sound when the timer finishes
-                        playChurchBell();
+                        playBell();
 
                         if (!appState.isBreak) {
-                            appState.studyTimeSaved = appState.initialDuration;
-                            modalTime.textContent = `${Math.floor(appState.studyTimeSaved / 60)} minutes`;
-                            saveModal.classList.remove('hidden');
-                            saveModal.classList.add('flex');
+                            // Automatically save the session
+                            saveStudyRecord(appState.initialDuration);
+                            showMessage('Çalışma oturumu tamamlandı ve otomatik olarak kaydedildi!');
+                            
+                            // Reset for the next break
+                            appState.isBreak = false;
+                            resetTimer(appState.studyDuration, false);
                         } else {
                             appState.isBreak = false;
                             resetTimer(appState.studyDuration, false);
@@ -334,15 +405,33 @@
                     updateProgressCircle();
                 }, 1000);
             };
-
+            
             const pauseTimer = () => {
                 clearInterval(appState.timer);
                 appState.isPaused = true;
-                // Update the initial duration with the current remaining time
-                appState.initialDuration = appState.timeRemaining; 
-                startBtn.classList.remove('hidden');
-                pauseBtn.classList.add('hidden');
+                pauseResumeBtn.textContent = 'Devam Et';
+                pauseResumeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>Devam Et`;
             };
+
+            const togglePauseResume = () => {
+                if (appState.isPaused) {
+                    startTimer();
+                } else {
+                    pauseTimer();
+                }
+            };
+            
+            const stopSessionAndSave = () => {
+                pauseTimer(); // Duraklat
+                const timeStudied = appState.initialDuration - appState.timeRemaining;
+                if (timeStudied <= 0) {
+                    showMessage('Oturumun kaydedilmesi için 0 dakikadan uzun olması gerekir.');
+                    resetTimer();
+                    return;
+                }
+                showSaveModal(true); // Kayıt modalını göster
+            };
+
 
             const resetTimer = (duration = appState.studyDuration, isBreak = false) => {
                 clearInterval(appState.timer);
@@ -351,42 +440,63 @@
                 appState.timeRemaining = duration;
                 appState.initialDuration = duration;
                 appState.startTime = 0; // Reset start time
+                appState.isSessionActive = false;
                 updateTimerDisplay(appState.timeRemaining);
                 updateProgressCircle();
-                statusText.textContent = isBreak ? 'Break' : 'Study Session';
-                startBtn.classList.remove('hidden');
-                pauseBtn.classList.add('hidden');
-                stopBtn.classList.add('hidden');
-                subjectInput.value = '';
+                statusText.textContent = isBreak ? 'Mola' : 'Çalışma Oturumu';
+                
+                updateButtons(false);
+                customSubjectInput.value = '';
+                appState.selectedSubject = null;
+                document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500'));
             };
 
-            const saveAndReset = () => {
-                clearInterval(appState.timer);
-                const timeStudied = appState.initialDuration - appState.timeRemaining;
-                appState.studyTimeSaved = timeStudied;
-                modalTime.textContent = `${Math.floor(appState.studyTimeSaved / 60)} minutes`;
+            const showSaveModal = (isManualSave) => {
+                modalTitle.textContent = isManualSave ? 'Çalışma Oturumunu Kaydet' : 'Yeni Oturum Başlat';
+                modalMessage.textContent = isManualSave 
+                    ? `Bu oturumda ${Math.floor((appState.initialDuration - appState.timeRemaining) / 60)} dakika çalıştınız. Kaydetmek için bir konu seçin.`
+                    : 'Zamanlayıcıyı başlatmadan önce bir konu seçin.';
+                startSessionBtn.textContent = isManualSave ? 'Oturumu Kaydet' : 'Oturumu Başlat';
+                
                 saveModal.classList.remove('hidden');
                 saveModal.classList.add('flex');
             };
 
-            const saveStudyRecord = () => {
-                if (appState.studyTimeSaved <= 0) {
-                    closeModal();
-                    return;
+            const saveStudyRecord = (timeStudied) => {
+                let subjectName;
+                if (customSubjectInput.value) {
+                    subjectName = customSubjectInput.value;
+                } else if (appState.selectedSubject) {
+                    subjectName = appState.selectedSubject;
+                } else {
+                    subjectName = 'Genel';
                 }
+
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = (today.getMonth() + 1).toString().padStart(2, '0');
+                const day = today.getDate().toString().padStart(2, '0');
+                const date = `${year}-${month}-${day}`;
+                
                 const record = {
-                    minutes: Math.floor(appState.studyTimeSaved / 60),
-                    subject: subjectInput.value || 'General',
-                    date: new Date().toISOString().split('T')[0]
+                    minutes: Math.floor(timeStudied / 60),
+                    subject: subjectName,
+                    date: date
                 };
 
                 appState.studyRecords.push(record);
                 localStorage.setItem('studyRecords', JSON.stringify(appState.studyRecords));
                 
-                appState.studyTimeSaved = 0;
+                // Takvimdeki ilgili günün animasyonunu tetikle
+                const dayElement = document.querySelector(`.day-cell[data-day="${today.getDate()}"]`);
+                if (dayElement) {
+                    dayElement.classList.add('animate-pulse-success');
+                    setTimeout(() => {
+                        dayElement.classList.remove('animate-pulse-success');
+                    }, 600); // Animasyon süresi 0.6s
+                }
+
                 loadRecordsAndRender();
-                closeModal();
-                resetTimer();
             };
 
             const closeModal = () => {
@@ -417,7 +527,7 @@
                 });
                 
                 const monthlyMinutes = monthlyRecords.reduce((sum, record) => sum + record.minutes, 0);
-                monthlyStudyTime.textContent = `${monthlyMinutes} minutes`;
+                monthlyStudyTime.textContent = `${monthlyMinutes} dakika`;
                 monthlySessionsCount.textContent = monthlyRecords.length;
             };
 
@@ -436,7 +546,7 @@
                     return acc;
                 }, {});
 
-                const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const daysOfWeek = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
                 daysOfWeek.forEach(day => {
                     const el = document.createElement('div');
                     el.className = 'text-xs font-semibold text-gray-500';
@@ -477,7 +587,7 @@
                     const studyTime = document.createElement('span');
                     studyTime.className = 'text-[10px] text-gray-400 mt-1';
                     if (studyMinutes > 0) {
-                        studyTime.textContent = `${studyMinutes}m`;
+                        studyTime.textContent = `${studyMinutes}d`;
                     }
                     dayDiv.appendChild(studyTime);
                     calendarContainer.appendChild(dayDiv);
@@ -494,7 +604,7 @@
                 dailySessionsList.innerHTML = '';
 
                 if (sessionsForDay.length === 0) {
-                    dailySessionsList.innerHTML = '<p class="text-gray-400 text-center">No study sessions on this day.</p>';
+                    dailySessionsList.innerHTML = '<p class="text-gray-400 text-center">Bu güne ait çalışma oturumu bulunamadı.</p>';
                 } else {
                     sessionsForDay.forEach(session => {
                         const sessionDiv = document.createElement('div');
@@ -503,7 +613,7 @@
                             <div>
                                 <p class="text-lg font-semibold text-gray-100">${session.subject}</p>
                             </div>
-                            <span class="text-lg font-bold text-purple-400">${session.minutes}m</span>
+                            <span class="text-lg font-bold text-purple-400">${session.minutes}d</span>
                         `;
                         dailySessionsList.appendChild(sessionDiv);
                     });
@@ -539,27 +649,86 @@
                 customizeModal.classList.remove('flex');
                 customizeModal.classList.add('hidden');
             };
+            
+            const startNewSession = () => {
+                const selectedSubject = customSubjectInput.value || appState.selectedSubject;
+                if (!selectedSubject) {
+                    showMessage('Lütfen başlamadan önce bir konu seçin.');
+                    return;
+                }
+                closeModal();
+                startTimer();
+            };
 
-            startBtn.addEventListener('click', startTimer);
-            pauseBtn.addEventListener('click', pauseTimer);
-            stopBtn.addEventListener('click', saveAndReset);
-            resetBtn.addEventListener('click', () => resetTimer());
+            subjectGrid.addEventListener('click', (e) => {
+                const target = e.target.closest('.subject-btn');
+                if (target) {
+                    document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500'));
+                    target.classList.add('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                    appState.selectedSubject = target.dataset.subject;
+                    customSubjectInput.value = target.dataset.subject; // Yeni eklenen satır
+                }
+            });
+
+            customSubjectInput.addEventListener('input', () => {
+                appState.selectedSubject = null;
+                document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500'));
+            });
+
+            startBtn.addEventListener('click', () => showSaveModal(false));
+            pauseResumeBtn.addEventListener('click', togglePauseResume);
+            stopSaveBtn.addEventListener('click', stopSessionAndSave);
+            
+            resetBtn.addEventListener('click', () => {
+                resetTimer();
+            });
+
             document.getElementById('set-study').addEventListener('click', () => {
+                if (appState.isSessionActive) {
+                    showMessage('Lütfen önce mevcut oturumu kaydedin veya sıfırlayın.');
+                    return;
+                }
                 currentTimerType = 'study';
                 resetTimer(appState.studyDuration);
             });
             document.getElementById('set-break').addEventListener('click', () => {
+                if (appState.isSessionActive) {
+                    showMessage('Lütfen önce mevcut oturumu kaydedin veya sıfırlayın.');
+                    return;
+                }
                 currentTimerType = 'break';
                 resetTimer(appState.breakDuration, true);
             });
             document.getElementById('set-long-break').addEventListener('click', () => {
+                if (appState.isSessionActive) {
+                    showMessage('Lütfen önce mevcut oturumu kaydedin veya sıfırlayın.');
+                    return;
+                }
                 currentTimerType = 'longBreak';
                 resetTimer(appState.longBreakDuration, true);
             });
-            confirmSaveBtn.addEventListener('click', saveStudyRecord);
+            startSessionBtn.addEventListener('click', () => {
+                if (modalTitle.textContent === 'Yeni Oturum Başlat') {
+                    startNewSession();
+                } else {
+                    const timeStudied = appState.initialDuration - appState.timeRemaining;
+                    if (timeStudied > 0) {
+                        saveStudyRecord(timeStudied);
+                        closeModal();
+                        resetTimer();
+                    } else {
+                         showMessage('Oturumun kaydedilmesi için 0 dakikadan uzun olması gerekir.');
+                         closeModal();
+                         resetTimer();
+                    }
+                }
+            });
             cancelSaveBtn.addEventListener('click', () => {
-                resetTimer();
                 closeModal();
+                // Eğer oturum manuel durdurulmuşsa, modal kapanınca zamanlayıcıyı sıfırla
+                if (appState.isSessionActive) {
+                     resetTimer();
+                }
             });
             closeDailyDetailsBtn.addEventListener('click', () => {
                 dailyDetailsModal.classList.remove('flex');
@@ -571,11 +740,7 @@
                 customizeModal.classList.remove('flex');
                 customizeModal.classList.add('hidden');
             });
-            mainPageNav.addEventListener('click', () => {
-                // In a multi-page app, this would navigate to the main page.
-                // Since this is a single file, we'll just log to the console.
-                console.log('Navigating to main page...');
-            });
+
 
             calendarContainer.addEventListener('click', (e) => {
                 const dayCell = e.target.closest('.day-cell');

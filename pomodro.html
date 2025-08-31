@@ -59,7 +59,7 @@
     <!-- Header -->
     <header class="w-full max-w-4xl flex items-center py-4 px-6 mb-8 justify-between">
         <!-- New navigation icon for main page -->
-        <a href=" https://wazp2.github.io/tracker/ " class="purple-gradient p-3 rounded-2xl cursor-pointer hover:opacity-80 transition-opacity btn-shadow">
+        <a href="https://wazp2.github.io/tracker/" class="purple-gradient p-3 rounded-2xl cursor-pointer hover:opacity-80 transition-opacity btn-shadow">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -71,7 +71,7 @@
         
         <div class="relative">
             <input type="text" placeholder="Konu ara..." class="bg-[#1a1e35] text-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8e47ff]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2d00/svg" class="h-4 w-4 absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
         </div>
@@ -124,7 +124,7 @@
                     </button>
                     <!-- Sıfırlama düğmesi -->
                     <button id="reset-btn" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base btn-shadow flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2d00/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M23 4v6h-6"></path>
                             <path d="M1 20v-6h6"></path>
                             <path d="M3.52 10C4.65 6.55 8.35 4 12 4s7.35 2.55 8.48 6"></path>
@@ -145,6 +145,23 @@
             <!-- Study Records Calendar -->
             <div class="container-bg rounded-3xl p-8 box-shadow">
                 <h2 class="text-xl font-semibold mb-6 text-gray-200">Çalışma Takibi</h2>
+                <!-- Calendar Navigation -->
+                <div class="flex justify-between items-center mb-4">
+                    <button id="prev-month-btn" class="text-gray-400 hover:text-gray-200 p-2 rounded-full hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2d00/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <div class="flex-grow text-center">
+                        <span id="current-month-display" class="text-gray-200 text-lg font-semibold"></span>
+                    </div>
+                    <button id="next-month-btn" class="text-gray-400 hover:text-gray-200 p-2 rounded-full hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2d00/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- Calendar Grid -->
                 <div id="calendar-container" class="grid grid-cols-7 gap-1 text-center">
                     <!-- Calendar days will be rendered here by JS -->
                 </div>
@@ -174,14 +191,33 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- JSON Save/Load Buttons -->
+            <div class="container-bg rounded-3xl p-8 box-shadow flex flex-col space-y-4">
+                <h3 class="text-xl font-semibold text-gray-200">Veriyi Yönet</h3>
+                <button id="save-json-btn" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base btn-shadow flex items-center justify-center text-sm">
+                    <svg xmlns="http://www.w3.org/2d00/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13 3h-2c-1.103 0-2 .897-2 2v2H7c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2h-2V5c0-1.103-.897-2-2-2zm-1 14.586l-3.293-3.293-1.414 1.414L12 19.414l5.707-5.707-1.414-1.414L12 14.586zM13 10V5.414l4.586 4.586H13z" />
+                    </svg>
+                    JSON'a Kaydet
+                </button>
+                <label for="load-json-file" class="cursor-pointer bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base btn-shadow flex items-center justify-center text-sm">
+                    <svg xmlns="http://www.w3.org/2d00/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+                        <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4z" />
+                    </svg>
+                    JSON'dan Yükle
+                    <input type="file" id="load-json-file" class="hidden" accept=".json">
+                </label>
+            </div>
         </div>
     </main>
 
-    <!-- Modal for Saving Study Session -->
-    <div id="save-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
+    <!-- Modal for Starting Session -->
+    <div id="start-session-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
         <div class="container-bg rounded-3xl p-8 w-full max-w-md box-shadow">
-            <h3 id="modal-title" class="text-xl font-semibold text-gray-100 mb-4">Yeni Oturum Başlat</h3>
-            <p id="modal-message" class="text-gray-300 mb-4">Zamanlayıcıyı başlatmadan önce bir konu seçin.</p>
+            <h3 id="start-modal-title" class="text-xl font-semibold text-gray-100 mb-4">Yeni Oturum Başlat</h3>
+            <p id="start-modal-message" class="text-gray-300 mb-4">Zamanlayıcıyı başlatmadan önce bir konu seçin.</p>
             <div class="mb-4">
                 <label for="custom-subject-input" class="block text-gray-400 text-sm font-medium mb-2">Konu Adını Girin</label>
                 <input type="text" id="custom-subject-input" placeholder="Konu adımı kendim belirleyeceğim..." class="w-full bg-[#0d0f1c] text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8e47ff]" />
@@ -196,8 +232,33 @@
                 </div>
             </div>
             <div class="flex justify-end space-x-3">
-                <button id="cancel-save" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">İptal</button>
-                <button id="confirm-save" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Oturumu Başlat</button>
+                <button id="cancel-start" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">İptal</button>
+                <button id="confirm-start" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Oturumu Başlat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Saving Session -->
+    <div id="save-session-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4">
+        <div class="container-bg rounded-3xl p-8 w-full max-w-md box-shadow">
+            <h3 id="save-modal-title" class="text-xl font-semibold text-gray-100 mb-4">Çalışma Oturumunu Kaydet</h3>
+            <p id="save-modal-message" class="text-gray-300 mb-4"></p>
+            <div class="mb-4">
+                <label for="save-subject-input" class="block text-gray-400 text-sm font-medium mb-2">Konu Adını Girin</label>
+                <input type="text" id="save-subject-input" placeholder="Konu adımı kendim belirleyeceğim..." class="w-full bg-[#0d0f1c] text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8e47ff]" />
+                <div id="save-subject-grid" class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Sözel Yetenek">Sözel Yetenek</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Sayısal Yetenek">Sayısal Yetenek</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Tarih">Tarih</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Türkiye Coğrafyası">Türkiye Coğrafyası</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Eğitimin Temelleri ve Türk Milli Eğitim Sistemi">Eğitimin Temelleri ve Türk Milli Eğitim Sistemi</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Mevzuat">Mevzuat</button>
+                    <button class="subject-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg btn-base hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500" data-subject="Diğer">Diğer</button>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-save-manual" class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full font-semibold btn-base">İptal</button>
+                <button id="confirm-save-manual" class="purple-gradient text-white px-6 py-2 rounded-full font-semibold btn-base">Oturumu Kaydet</button>
             </div>
         </div>
     </div>
@@ -208,7 +269,7 @@
             <div class="flex justify-between items-center mb-4">
                 <h3 id="daily-details-date" class="text-xl font-semibold text-gray-100"></h3>
                 <button id="close-daily-details" class="text-gray-400 hover:text-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2d00/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
@@ -249,13 +310,21 @@
             const resetBtn = document.getElementById('reset-btn');
             const progressCircle = document.getElementById('progress-circle');
             const calendarContainer = document.getElementById('calendar-container');
-            const saveModal = document.getElementById('save-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalMessage = document.getElementById('modal-message');
-            const subjectGrid = document.getElementById('subject-grid');
+
+            // Modals and their elements
+            const startSessionModal = document.getElementById('start-session-modal');
             const customSubjectInput = document.getElementById('custom-subject-input');
-            const startSessionBtn = document.getElementById('confirm-save');
-            const cancelSaveBtn = document.getElementById('cancel-save');
+            const subjectGrid = document.getElementById('subject-grid');
+            const confirmStartBtn = document.getElementById('confirm-start');
+            const cancelStartBtn = document.getElementById('cancel-start');
+
+            const saveSessionModal = document.getElementById('save-session-modal');
+            const saveModalMessage = document.getElementById('save-modal-message');
+            const saveSubjectInput = document.getElementById('save-subject-input');
+            const saveSubjectGrid = document.getElementById('save-subject-grid');
+            const confirmSaveManualBtn = document.getElementById('confirm-save-manual');
+            const cancelSaveManualBtn = document.getElementById('cancel-save-manual');
+
             const completedSessionsCount = document.getElementById('completed-sessions-count');
             const totalStudyTimeDisplay = document.getElementById('total-study-time');
             const monthlyStudyTime = document.getElementById('monthly-study-time');
@@ -270,7 +339,14 @@
             const cancelCustomizeBtn = document.getElementById('cancel-customize');
             const messageBox = document.getElementById('message-box');
             const messageText = document.getElementById('message-text');
+            const prevMonthBtn = document.getElementById('prev-month-btn');
+            const nextMonthBtn = document.getElementById('next-month-btn');
+            const currentMonthDisplay = document.getElementById('current-month-display');
             
+            // New JSON save/load elements
+            const saveJsonBtn = document.getElementById('save-json-btn');
+            const loadJsonFileInput = document.getElementById('load-json-file');
+
             // Audio setup for a relaxing church bell sound
             const bellSynth = new Tone.MembraneSynth({
                 pitchDecay: 0.05,
@@ -307,8 +383,9 @@
                 longBreakDuration: parseInt(localStorage.getItem('longBreakDuration')) || 15 * 60,
                 studyRecords: [],
                 startTime: 0,
-                selectedSubject: null, // Store selected subject from the grid
-                isSessionActive: false
+                currentSubject: null, // Unified state for the current session's subject
+                isSessionActive: false,
+                currentCalendarDate: new Date()
             };
 
             const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110;
@@ -368,7 +445,7 @@
                 
                 updateButtons(true);
                 pauseResumeBtn.textContent = 'Duraklat';
-                pauseResumeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h4v12H6zM14 6h4v12h-4z" /></svg>Duraklat`;
+                pauseResumeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2d00/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h4v12H6zM14 6h4v12h-4z" /></svg>Duraklat`;
 
 
                 // Set the start time
@@ -390,7 +467,7 @@
 
                         if (!appState.isBreak) {
                             // Automatically save the session
-                            saveStudyRecord(appState.initialDuration);
+                            saveStudyRecord(appState.initialDuration, appState.currentSubject);
                             showMessage('Çalışma oturumu tamamlandı ve otomatik olarak kaydedildi!');
                             
                             // Reset for the next break
@@ -410,7 +487,7 @@
                 clearInterval(appState.timer);
                 appState.isPaused = true;
                 pauseResumeBtn.textContent = 'Devam Et';
-                pauseResumeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>Devam Et`;
+                pauseResumeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2d00/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>Devam Et`;
             };
 
             const togglePauseResume = () => {
@@ -425,11 +502,35 @@
                 pauseTimer(); // Duraklat
                 const timeStudied = appState.initialDuration - appState.timeRemaining;
                 if (timeStudied <= 0) {
-                    showMessage('Oturumun kaydedilmesi için 0 dakikadan uzun olması gerekir.');
+                    // Provide a clearer message if the session is too short to save.
+                    showMessage('Hata: Oturum süresi çok kısa olduğu için kaydedilemedi. Kaydetmek için en az 1 dakika çalışmalısınız.');
                     resetTimer();
                     return;
                 }
-                showSaveModal(true); // Kayıt modalını göster
+                saveSessionModal.classList.remove('hidden');
+                saveSessionModal.classList.add('flex');
+                saveModalMessage.textContent = `Bu oturumda ${Math.floor(timeStudied / 60)} dakika çalıştınız. Kaydetmek için bir konu seçin.`;
+                
+                // Prefill the subject from the current session
+                if (appState.currentSubject) {
+                    saveSubjectInput.value = appState.currentSubject;
+                    // Also highlight the corresponding button if it's a pre-defined one
+                    document.querySelectorAll('#save-subject-grid .subject-btn').forEach(btn => {
+                        if (btn.dataset.subject === appState.currentSubject) {
+                            btn.classList.add('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                            btn.classList.remove('bg-gray-700');
+                        } else {
+                            btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                            btn.classList.add('bg-gray-700');
+                        }
+                    });
+                } else {
+                    saveSubjectInput.value = '';
+                    document.querySelectorAll('#save-subject-grid .subject-btn').forEach(btn => {
+                        btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                        btn.classList.add('bg-gray-700');
+                    });
+                }
             };
 
 
@@ -441,38 +542,18 @@
                 appState.initialDuration = duration;
                 appState.startTime = 0; // Reset start time
                 appState.isSessionActive = false;
+                appState.currentSubject = null; // Clear the subject for the new session
                 updateTimerDisplay(appState.timeRemaining);
                 updateProgressCircle();
                 statusText.textContent = isBreak ? 'Mola' : 'Çalışma Oturumu';
                 
                 updateButtons(false);
                 customSubjectInput.value = '';
-                appState.selectedSubject = null;
                 document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500'));
             };
 
-            const showSaveModal = (isManualSave) => {
-                modalTitle.textContent = isManualSave ? 'Çalışma Oturumunu Kaydet' : 'Yeni Oturum Başlat';
-                modalMessage.textContent = isManualSave 
-                    ? `Bu oturumda ${Math.floor((appState.initialDuration - appState.timeRemaining) / 60)} dakika çalıştınız. Kaydetmek için bir konu seçin.`
-                    : 'Zamanlayıcıyı başlatmadan önce bir konu seçin.';
-                startSessionBtn.textContent = isManualSave ? 'Oturumu Kaydet' : 'Oturumu Başlat';
-                
-                saveModal.classList.remove('hidden');
-                saveModal.classList.add('flex');
-            };
-
-            const saveStudyRecord = (timeStudied) => {
-                let subjectName;
-                if (customSubjectInput.value) {
-                    subjectName = customSubjectInput.value;
-                } else if (appState.selectedSubject) {
-                    subjectName = appState.selectedSubject;
-                } else {
-                    subjectName = 'Genel';
-                }
-                
-                // Use local date to avoid timezone issues
+            const saveStudyRecord = (timeStudied, subjectName) => {
+                // FIX: Get local date instead of UTC to fix the one-day-before saving bug
                 const today = new Date();
                 const year = today.getFullYear();
                 const month = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -489,7 +570,7 @@
                 appState.studyRecords.push(record);
                 localStorage.setItem('studyRecords', JSON.stringify(appState.studyRecords));
                 
-                const dayElement = document.querySelector(`.day-cell[data-day="${today.getDate()}"]`);
+                const dayElement = document.querySelector(`.day-cell[data-date="${record.date}"]`);
                 if (dayElement) {
                     dayElement.classList.add('animate-pulse-success');
                     setTimeout(() => {
@@ -500,16 +581,16 @@
                 loadRecordsAndRender();
             };
 
-            const closeModal = () => {
-                saveModal.classList.remove('flex');
-                saveModal.classList.add('hidden');
+            const closeModal = (modal) => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
             };
 
             const loadRecordsAndRender = () => {
                 const records = JSON.parse(localStorage.getItem('studyRecords')) || [];
                 appState.studyRecords = records;
-                renderCalendar(records);
-                updateAnalytics(records);
+                renderCalendar(appState.currentCalendarDate);
+                updateAnalytics(appState.studyRecords);
             };
             
             const updateAnalytics = (records) => {
@@ -518,13 +599,12 @@
                 totalStudyTimeDisplay.textContent = totalMinutes;
                 completedSessionsCount.textContent = totalSessions;
 
-                const today = new Date();
-                const currentMonth = today.getMonth();
-                const currentYear = today.getFullYear();
+                const currentMonth = appState.currentCalendarDate.getMonth();
+                const currentYear = appState.currentCalendarDate.getFullYear();
                 
                 const monthlyRecords = records.filter(record => {
                     const recordDate = new Date(record.date);
-                    return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+                    return recordDate.getUTCMonth() === currentMonth && recordDate.getUTCFullYear() === currentYear;
                 });
                 
                 const monthlyMinutes = monthlyRecords.reduce((sum, record) => sum + record.minutes, 0);
@@ -532,17 +612,31 @@
                 monthlySessionsCount.textContent = monthlyRecords.length;
             };
 
-            const renderCalendar = (records) => {
+            const renderCalendar = (date) => {
                 calendarContainer.innerHTML = '';
+                
+                const currentMonth = date.getMonth();
+                const currentYear = date.getFullYear();
+
                 const today = new Date();
-                const currentMonth = today.getMonth();
-                const currentYear = today.getFullYear();
+                const todayMonth = today.getMonth();
+                const todayYear = today.getFullYear();
+
+                currentMonthDisplay.textContent = `${date.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })}`;
+
                 const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
                 const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-                const dailyStudyMap = records.reduce((acc, record) => {
-                    const day = new Date(record.date).getDate();
-                    acc[day] = (acc[day] || 0) + record.minutes;
+                const monthlyRecords = appState.studyRecords.filter(record => {
+                    const recordDate = new Date(record.date);
+                    return recordDate.getUTCMonth() === currentMonth && recordDate.getUTCFullYear() === currentYear;
+                });
+
+                const dailyStudyMap = monthlyRecords.reduce((acc, record) => {
+                    const day = new Date(record.date).getUTCDate();
+                    if (!acc[day]) acc[day] = { minutes: 0, sessions: [] };
+                    acc[day].minutes += record.minutes;
+                    acc[day].sessions.push(record);
                     return acc;
                 }, {});
 
@@ -563,10 +657,12 @@
                     const dayDiv = document.createElement('div');
                     dayDiv.className = 'day-cell flex flex-col items-center justify-center p-1 rounded-lg transition-colors cursor-pointer hover:bg-gray-700';
                     dayDiv.dataset.day = i;
+                    dayDiv.dataset.date = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
 
-                    const studyMinutes = dailyStudyMap[i] || 0;
+                    const dailyData = dailyStudyMap[i] || { minutes: 0, sessions: [] };
+                    const studyMinutes = dailyData.minutes;
                     
-                    if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    if (i === today.getDate() && currentMonth === todayMonth && currentYear === todayYear) {
                         dayDiv.classList.add('ring-2', 'ring-purple-400');
                     }
                     
@@ -580,68 +676,257 @@
                     }
                     
                     const dayNumber = document.createElement('span');
-                    dayNumber.className = 'text-gray-200 font-medium';
+                    dayNumber.className = 'text-gray-200 font-bold text-sm';
                     dayNumber.textContent = i;
                     dayDiv.appendChild(dayNumber);
 
-                    const studyTime = document.createElement('span');
-                    studyTime.className = 'text-[10px] text-gray-400 mt-1';
                     if (studyMinutes > 0) {
-                        studyTime.textContent = `${studyMinutes}d`;
+                        const studyTime = document.createElement('span');
+                        studyTime.className = 'text-xs text-gray-400 mt-1';
+                        studyTime.textContent = `${studyMinutes} dk`;
+                        dayDiv.appendChild(studyTime);
                     }
-                    dayDiv.appendChild(studyTime);
+
+                    dayDiv.addEventListener('click', () => {
+                        showDailyDetails(dayDiv.dataset.date, dailyData.sessions);
+                    });
+
                     calendarContainer.appendChild(dayDiv);
                 }
             };
-            
-            const showDailyDetails = (day) => {
-                const today = new Date();
-                const dateString = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-                
-                const sessionsForDay = appState.studyRecords.filter(record => record.date === dateString);
-                
-                dailyDetailsDate.textContent = dateString;
-                dailySessionsList.innerHTML = '';
 
-                if (sessionsForDay.length === 0) {
-                    dailySessionsList.innerHTML = '<p class="text-gray-400 text-center">Bu güne ait çalışma oturumu bulunamadı.</p>';
+            const showDailyDetails = (dateString, sessions) => {
+                dailyDetailsDate.textContent = new Date(dateString).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+                dailySessionsList.innerHTML = '';
+                if (sessions.length === 0) {
+                    dailySessionsList.innerHTML = '<p class="text-gray-400">Bu günde kaydedilmiş oturum bulunmuyor.</p>';
                 } else {
-                    sessionsForDay.forEach(session => {
-                        const sessionDiv = document.createElement('div');
-                        sessionDiv.className = 'bg-gray-700 rounded-xl p-4 flex justify-between items-center';
-                        sessionDiv.dataset.sessionId = session.id;
-                        sessionDiv.innerHTML = `
+                    sessions.forEach(session => {
+                        const sessionItem = document.createElement('div');
+                        sessionItem.className = 'bg-gray-700 p-4 rounded-xl flex justify-between items-center';
+                        sessionItem.innerHTML = `
                             <div>
-                                <p class="text-lg font-semibold text-gray-100">${session.subject}</p>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-lg font-bold text-purple-400">${session.minutes}d</span>
-                                <button class="delete-session-btn text-red-400 hover:text-red-500 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
+                                <h4 class="font-semibold text-gray-200">${session.subject}</h4>
+                                <p class="text-sm text-gray-400">${session.minutes} dakika</p>
                             </div>
                         `;
-                        dailySessionsList.appendChild(sessionDiv);
+                        dailySessionsList.appendChild(sessionItem);
                     });
                 }
-                
                 dailyDetailsModal.classList.remove('hidden');
                 dailyDetailsModal.classList.add('flex');
             };
+
+            // Event Listeners for new calendar navigation
+            prevMonthBtn.addEventListener('click', () => {
+                const prevMonth = new Date(appState.currentCalendarDate.getFullYear(), appState.currentCalendarDate.getMonth() - 1, 1);
+                appState.currentCalendarDate = prevMonth;
+                loadRecordsAndRender();
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                const nextMonth = new Date(appState.currentCalendarDate.getFullYear(), appState.currentCalendarDate.getMonth() + 1, 1);
+                appState.currentCalendarDate = nextMonth;
+                loadRecordsAndRender();
+            });
+
+            // --- JSON Save/Load Logic ---
+            const saveToJSON = () => {
+                const jsonData = JSON.stringify(appState.studyRecords, null, 2);
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ags_takip_verileri.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showMessage('Verileriniz JSON dosyası olarak kaydedildi.');
+            };
+
+            const loadFromJSON = (event) => {
+                const file = event.target.files[0];
+                if (!file) {
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const loadedData = JSON.parse(e.target.result);
+                        if (Array.isArray(loadedData)) {
+                            appState.studyRecords = loadedData;
+                            localStorage.setItem('studyRecords', JSON.stringify(appState.studyRecords));
+                            loadRecordsAndRender();
+                            showMessage('Veriler başarıyla yüklendi.');
+                        } else {
+                            showMessage('Hata: Seçilen dosya geçerli bir veri formatı içermiyor.');
+                        }
+                    } catch (error) {
+                        console.error('JSON dosyasını ayrıştırma hatası:', error);
+                        showMessage('Hata: Dosya okunamadı veya bozuk.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+
+            // Initial setup
+            resetTimer();
+            loadRecordsAndRender();
+
+            // Load last selected subject on page load
+            const lastSubject = localStorage.getItem('lastSelectedSubject');
+            if (lastSubject) {
+                const selectedBtn = document.querySelector(`.subject-btn[data-subject="${lastSubject}"]`);
+                if (selectedBtn) {
+                    selectedBtn.classList.add('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                    selectedBtn.classList.remove('bg-gray-700');
+                }
+                customSubjectInput.value = lastSubject;
+            }
+
+            // All other event listeners from original code
+            startBtn.addEventListener('click', () => {
+                startSessionModal.classList.remove('hidden');
+                startSessionModal.classList.add('flex');
+                
+                // Set the input value to the remembered subject, if any
+                const lastSelectedSubject = localStorage.getItem('lastSelectedSubject');
+                if (lastSelectedSubject) {
+                    customSubjectInput.value = lastSelectedSubject;
+                    appState.currentSubject = lastSelectedSubject;
+                    const selectedBtn = document.querySelector(`#subject-grid .subject-btn[data-subject="${lastSelectedSubject}"]`);
+                    if (selectedBtn) {
+                        selectedBtn.classList.add('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                        selectedBtn.classList.remove('bg-gray-700');
+                    }
+                } else {
+                    customSubjectInput.value = '';
+                    appState.currentSubject = null;
+                }
+            });
+
+            pauseResumeBtn.addEventListener('click', togglePauseResume);
+            stopSaveBtn.addEventListener('click', stopSessionAndSave);
+            resetBtn.addEventListener('click', () => resetTimer());
+            cancelStartBtn.addEventListener('click', () => closeModal(startSessionModal));
+            cancelSaveManualBtn.addEventListener('click', () => closeModal(saveSessionModal));
+
+            // Start Session Logic
+            confirmStartBtn.addEventListener('click', () => {
+                const selectedSubject = customSubjectInput.value || appState.currentSubject;
+                if (!selectedSubject) {
+                    showMessage('Lütfen bir konu seçin veya adını girin.');
+                    return;
+                }
+                localStorage.setItem('lastSelectedSubject', selectedSubject);
+                resetTimer(appState.studyDuration, false);
+                appState.currentSubject = selectedSubject;
+                startTimer();
+                closeModal(startSessionModal);
+            });
+
+            // Save Session Logic (after manual stop)
+            confirmSaveManualBtn.addEventListener('click', () => {
+                const timeStudied = appState.initialDuration - appState.timeRemaining;
+                const selectedSubject = saveSubjectInput.value || appState.currentSubject;
+
+                if (timeStudied > 0) {
+                    saveStudyRecord(timeStudied, selectedSubject);
+                    showMessage('Oturum başarıyla kaydedildi!');
+                }
+                localStorage.setItem('lastSelectedSubject', selectedSubject);
+                closeModal(saveSessionModal);
+                resetTimer();
+            });
+
+            // Subject button and input logic for the START modal
+            subjectGrid.querySelectorAll('.subject-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    subjectGrid.querySelectorAll('.subject-btn').forEach(b => {
+                        b.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                        b.classList.add('bg-gray-700');
+                    });
+                    btn.classList.add('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                    btn.classList.remove('bg-gray-700');
+                    appState.currentSubject = btn.dataset.subject;
+                    customSubjectInput.value = btn.dataset.subject;
+                    localStorage.setItem('lastSelectedSubject', btn.dataset.subject);
+                });
+            });
+
+            customSubjectInput.addEventListener('input', () => {
+                if (customSubjectInput.value) {
+                    subjectGrid.querySelectorAll('.subject-btn').forEach(btn => {
+                        btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                        btn.classList.add('bg-gray-700');
+                    });
+                    appState.currentSubject = customSubjectInput.value;
+                    localStorage.setItem('lastSelectedSubject', customSubjectInput.value);
+                }
+            });
+
+            // Subject button and input logic for the SAVE modal
+            saveSubjectGrid.querySelectorAll('.subject-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    saveSubjectGrid.querySelectorAll('.subject-btn').forEach(b => {
+                        b.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                        b.classList.add('bg-gray-700');
+                    });
+                    btn.classList.add('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                    btn.classList.remove('bg-gray-700');
+                    appState.currentSubject = btn.dataset.subject;
+                    saveSubjectInput.value = btn.dataset.subject;
+                    localStorage.setItem('lastSelectedSubject', btn.dataset.subject);
+                });
+            });
+
+            saveSubjectInput.addEventListener('input', () => {
+                if (saveSubjectInput.value) {
+                    saveSubjectGrid.querySelectorAll('.subject-btn').forEach(btn => {
+                        btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
+                        btn.classList.add('bg-gray-700');
+                    });
+                    appState.currentSubject = saveSubjectInput.value;
+                    localStorage.setItem('lastSelectedSubject', saveSubjectInput.value);
+                }
+            });
+
+            closeDailyDetailsBtn.addEventListener('click', () => {
+                dailyDetailsModal.classList.remove('flex');
+                dailyDetailsModal.classList.add('hidden');
+            });
             
-            const showCustomizeModal = () => {
-                const minutes = Math.floor(appState.initialDuration / 60);
-                minutesInput.value = minutes;
+            // Timer settings buttons
+            document.getElementById('set-study').addEventListener('click', () => {
+                resetTimer(appState.studyDuration, false);
+                currentTimerType = 'study';
+            });
+            document.getElementById('set-break').addEventListener('click', () => {
+                resetTimer(appState.breakDuration, true);
+                currentTimerType = 'break';
+            });
+            document.getElementById('set-long-break').addEventListener('click', () => {
+                resetTimer(appState.longBreakDuration, true);
+                currentTimerType = 'longBreak';
+            });
+            
+            // Timer customization modal
+            timerDisplay.addEventListener('click', () => {
+                minutesInput.value = Math.floor(appState.initialDuration / 60);
                 customizeModal.classList.remove('hidden');
                 customizeModal.classList.add('flex');
-            };
-            
-            const saveCustomTimer = () => {
-                const newMinutes = parseInt(minutesInput.value);
-                if (newMinutes > 0) {
-                    const newDuration = newMinutes * 60;
+            });
+
+            cancelCustomizeBtn.addEventListener('click', () => {
+                customizeModal.classList.remove('flex');
+                customizeModal.classList.add('hidden');
+            });
+
+            confirmCustomizeBtn.addEventListener('click', () => {
+                const newDuration = parseInt(minutesInput.value, 10) * 60;
+                if (newDuration > 0) {
                     if (currentTimerType === 'study') {
                         appState.studyDuration = newDuration;
                         localStorage.setItem('studyDuration', newDuration);
@@ -652,135 +937,17 @@
                         appState.longBreakDuration = newDuration;
                         localStorage.setItem('longBreakDuration', newDuration);
                     }
-                    resetTimer(newDuration, currentTimerType !== 'study');
-                }
-                customizeModal.classList.remove('flex');
-                customizeModal.classList.add('hidden');
-            };
-            
-            const startNewSession = () => {
-                const selectedSubject = customSubjectInput.value || appState.selectedSubject;
-                if (!selectedSubject) {
-                    showMessage('Lütfen başlamadan önce bir konu seçin.');
-                    return;
-                }
-                closeModal();
-                startTimer();
-            };
-            
-            const deleteSession = (sessionId) => {
-                appState.studyRecords = appState.studyRecords.filter(session => session.id !== sessionId);
-                localStorage.setItem('studyRecords', JSON.stringify(appState.studyRecords));
-                loadRecordsAndRender();
-                showDailyDetails(new Date(dailyDetailsDate.textContent).getDate());
-                showMessage('Oturum başarıyla silindi.');
-            };
-
-            subjectGrid.addEventListener('click', (e) => {
-                const target = e.target.closest('.subject-btn');
-                if (target) {
-                    document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500'));
-                    target.classList.add('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500');
-                    appState.selectedSubject = target.dataset.subject;
-                    customSubjectInput.value = target.dataset.subject; // Yeni eklenen satır
-                }
-            });
-
-            customSubjectInput.addEventListener('input', () => {
-                appState.selectedSubject = null;
-                document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('selected', 'bg-purple-600', 'ring-2', 'ring-purple-500'));
-            });
-
-            startBtn.addEventListener('click', () => showSaveModal(false));
-            pauseResumeBtn.addEventListener('click', togglePauseResume);
-            stopSaveBtn.addEventListener('click', stopSessionAndSave);
-            
-            resetBtn.addEventListener('click', () => {
-                resetTimer();
-            });
-
-            document.getElementById('set-study').addEventListener('click', () => {
-                if (appState.isSessionActive) {
-                    showMessage('Lütfen önce mevcut oturumu kaydedin veya sıfırlayın.');
-                    return;
-                }
-                currentTimerType = 'study';
-                resetTimer(appState.studyDuration);
-            });
-            document.getElementById('set-break').addEventListener('click', () => {
-                if (appState.isSessionActive) {
-                    showMessage('Lütfen önce mevcut oturumu kaydedin veya sıfırlayın.');
-                    return;
-                }
-                currentTimerType = 'break';
-                resetTimer(appState.breakDuration, true);
-            });
-            document.getElementById('set-long-break').addEventListener('click', () => {
-                if (appState.isSessionActive) {
-                    showMessage('Lütfen önce mevcut oturumu kaydedin veya sıfırlayın.');
-                    return;
-                }
-                currentTimerType = 'longBreak';
-                resetTimer(appState.longBreakDuration, true);
-            });
-            startSessionBtn.addEventListener('click', () => {
-                if (modalTitle.textContent === 'Yeni Oturum Başlat') {
-                    startNewSession();
+                    resetTimer(newDuration, appState.isBreak);
                 } else {
-                    const timeStudied = appState.initialDuration - appState.timeRemaining;
-                    if (timeStudied > 0) {
-                        saveStudyRecord(timeStudied);
-                        closeModal();
-                        resetTimer();
-                    } else {
-                         showMessage('Oturumun kaydedilmesi için 0 dakikadan uzun olması gerekir.');
-                         closeModal();
-                         resetTimer();
-                    }
+                    showMessage('Lütfen geçerli bir süre girin.');
                 }
-            });
-            cancelSaveBtn.addEventListener('click', () => {
-                closeModal();
-                // Eğer oturum manuel durdurulmuşsa, modal kapanınca zamanlayıcıyı sıfırla
-                if (appState.isSessionActive) {
-                     resetTimer();
-                }
-            });
-            closeDailyDetailsBtn.addEventListener('click', () => {
-                dailyDetailsModal.classList.remove('flex');
-                dailyDetailsModal.classList.add('hidden');
-            });
-            timerDisplay.addEventListener('click', showCustomizeModal);
-            confirmCustomizeBtn.addEventListener('click', saveCustomTimer);
-            cancelCustomizeBtn.addEventListener('click', () => {
                 customizeModal.classList.remove('flex');
                 customizeModal.classList.add('hidden');
             });
 
-
-            calendarContainer.addEventListener('click', (e) => {
-                const dayCell = e.target.closest('.day-cell');
-                if (dayCell) {
-                    const day = dayCell.dataset.day;
-                    if (day) {
-                        showDailyDetails(parseInt(day));
-                    }
-                }
-            });
-            
-            dailySessionsList.addEventListener('click', (e) => {
-                const deleteBtn = e.target.closest('.delete-session-btn');
-                if (deleteBtn) {
-                    const sessionDiv = deleteBtn.closest('[data-session-id]');
-                    const sessionId = parseInt(sessionDiv.dataset.sessionId);
-                    if (sessionId) {
-                        deleteSession(sessionId);
-                    }
-                }
-            });
-
-            resetTimer();
-            loadRecordsAndRender();
+            // New JSON event listeners
+            saveJsonBtn.addEventListener('click', saveToJSON);
+            loadJsonFileInput.addEventListener('change', loadFromJSON);
         };
     </script>
 </body>
